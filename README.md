@@ -10,13 +10,14 @@
     ```
    npm run dev
    ```
-   Creates a dist/ folder with the production-ready files.
 
 3. Build for production
     ```
    npm run build
    ```
-4. Preview production build locally
+   Creates a dist/ folder with the production-ready files.
+   
+5. Preview production build locally
     ```
    npm run preview
    ```
