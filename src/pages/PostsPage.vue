@@ -9,13 +9,16 @@ const posts = ref<IPost[]>([]);
 let intervalId: number | null = null;
 let postId: number = 1;
 
-const fetchPosts = async () => {
+const fetchPosts = async (): Promise<IPost> => {
+  const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`);
+
+  return await response.json() as Promise<IPost>;
+}
+
+const loadNextPost = async () => {
   try {
     isLoading.value = true;
-
-    const response = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`);
-    const post: IPost = await response.json();
-
+    const post = await fetchPosts();
     posts.value.push(post);
     postId += 1;
   } catch (error) {
@@ -26,8 +29,8 @@ const fetchPosts = async () => {
 };
 
 onMounted(() => {
-  fetchPosts();
-  intervalId = setInterval(fetchPosts, 5000)
+  loadNextPost();
+  intervalId = setInterval(loadNextPost, 5000)
 });
 
 onUnmounted(() => {

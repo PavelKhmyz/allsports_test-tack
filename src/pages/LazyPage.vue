@@ -10,17 +10,28 @@ const isLoading = ref<boolean>(true);
 const posts = ref<IPost[]>([]);
 const comments = ref<IComment[]>([]);
 
+const fetchPosts = async (): Promise<IPost[]> => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/posts?_limit=3');
+
+  return await response.json() as Promise<IPost[]>;
+}
+const fetchComments = async (): Promise<IComment[]> => {
+  const response = await fetch('https://jsonplaceholder.typicode.com/comments?_limit=3');
+
+  return await response.json() as Promise<IComment[]>;
+}
+
 onMounted(async () => {
   try {
     isLoading.value = true;
 
     const [postsResponse, commentsResponse] = await Promise.all([
-      fetch('https://jsonplaceholder.typicode.com/posts?_limit=3'),
-      fetch('https://jsonplaceholder.typicode.com/comments?_limit=3')
+      fetchPosts,
+      fetchComments,
     ]);
 
-    posts.value = await postsResponse.json();
-    comments.value = await commentsResponse.json();
+    posts.value = await postsResponse();
+    comments.value = await commentsResponse();
   } catch (error) {
     console.error(error);
   } finally {
